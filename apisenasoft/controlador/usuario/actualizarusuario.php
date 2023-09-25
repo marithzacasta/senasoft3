@@ -10,19 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") { //Condicional para verificar el mét
 
     //Se crea un array en formato JSON para recibir los datos enviados por el usuario y se guardan en la variable.
     $body =  json_encode(array(
+        "idusuario" => $_POST['idusuario'],
         "nombre" => $_POST['texto1'],
         "correo" => $_POST['texto2'],
         "contrasena" => $_POST['texto3'],
         "rol" => $_POST['texto4']
     ));
 
-    //Enviamos los datos al manejador
-    $datosArray = $_usuarios->post($body); //Se guardan las respuesta obtenidas de la función post luego de ingresar los datos en la base de datos.
+    //Enviamos datos al manejador
+    $datosArray = $_usuarios->put($body); //Se guardan las respuesta obtenidas de la función post luego de ingresar los datos en la base de datos.
     
     //Delvovemos una respuesta 
     header('Content-Type: application/json'); //Indica que la respuesta sera enviada en formato json.
 
-    if (isset($datosArray["result"]["error_id"])) { //Se comprueba si la variable tiene un valor de error.
+    if (isset($datosArray["result"]["error_id"])) { //Se comprueba si la vriable tiene un valor de error.
         $responseCode = $datosArray["result"]["error_id"]; // Se guarda la respuesta de error en la variable.
         http_response_code($responseCode); // Se manda la respuesta de error.
     } else {

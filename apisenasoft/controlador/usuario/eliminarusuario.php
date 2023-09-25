@@ -1,4 +1,5 @@
 <?php
+
 require_once '../modelo/respuestas.class.php';
 require_once '../modelo/usuario.class.php';
 
@@ -8,20 +9,28 @@ $_usuarios = new usuario;
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") { //Condicional para verificar el método pedido.
 
-    //Se crea un array en formato JSON para recibir los datos enviados por el usuario y se guardan en la variable.
-    $body =  json_encode(array(
-        "nombre" => $_POST['texto1'],
-        "correo" => $_POST['texto2'],
-        "contrasena" => $_POST['texto3'],
-        "rol" => $_POST['texto4']
-    ));
+    // $headers = getallheaders();
+    // // if(isset($headers["token"]) && isset($headers["idusuario"])){
+    //     //recibimos los datos enviados por el header
+    //     $send = [
+    //         // "token" => $headers["token"],
+    //         "idusuario" =>$headers["idusuario"]
+    //     ];
+    //     $postBody = json_encode($send);
+    // }else{
+    //     //recibimos los datos enviados
+    //     $postBody = file_get_contents("php://input");
+    // }
 
-    //Enviamos los datos al manejador
-    $datosArray = $_usuarios->post($body); //Se guardan las respuesta obtenidas de la función post luego de ingresar los datos en la base de datos.
+    //Se crea un array en formato JSON para recibir los datos enviados por el usuario y se guardan en la variable.
+    $body =  json_encode(array("idusuario" => $_POST['idusuario']));
+
+    //Enviamos datos al manejador
+    $datosArray = $_usuarios->delete($body); //Se guardan las respuesta obtenidas de la función post luego de obtener los datos en la base de datos.
     
     //Delvovemos una respuesta 
     header('Content-Type: application/json'); //Indica que la respuesta sera enviada en formato json.
-
+    
     if (isset($datosArray["result"]["error_id"])) { //Se comprueba si la variable tiene un valor de error.
         $responseCode = $datosArray["result"]["error_id"]; // Se guarda la respuesta de error en la variable.
         http_response_code($responseCode); // Se manda la respuesta de error.
